@@ -43,21 +43,4 @@
     (if (null? L) '()
         (if (not (P (car L))) (filter-in P (cdr L))
            (cons (car L) (filter-in P (cdr L)))))))
-;======================================================
 
-
-; PUNTO: 5
-; Elabore una función llamada list-index que debe recibir dos
-; argumentos: un predicado P y una lista L. La función retorna (desde una
-; posición inicial 0) el primer elemento de la lista que satisface el predicado
-; L. Si llega a suceder que ningún elemento satisface el predicado recibido, la
-; función debe retornar #f.
-
-(define (list-index P L)
-  (define (list-index-helper index L)
-    (cond
-      ((null? L) #f)                      
-      ((P (car L)) index)                   
-      (else (list-index-helper (+ index 1) (cdr L)))))
-
-  (list-index-helper 0 L))

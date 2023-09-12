@@ -1,5 +1,10 @@
 #lang eopl
 
+(define (my-append lista1 lista2)
+  (if (null? lista1)
+      lista2
+      (cons (car lista1) (my-append (cdr lista1) lista2))))
+
 ;PUNTO 1
 ;Elabore una función llamada invert que recibe un argumento:
 ;una lista L, sin embargo, esta lista L se compone de pares x; y que a su vez
@@ -65,6 +70,24 @@
 
 ;======================================================
 
+;PUNTO 7
+;Elabore una función llamada cartesian-product que recibe como
+;argumentos 2 listas de símbolos sin repeticiones L1 y L2. La función debe
+;retornar una lista de tuplas que representen el producto cartesiano entre L1
+;y L2. Los pares pueden aparecer en cualquier orden.
+
+(define cartesian-product
+  (lambda (L1 L2)
+    (if (null? L1) '()
+        (my-append (cartesian-product-aux2 (car L1) L2) (cartesian-product (cdr L1) L2)))))
+
+(define cartesian-product-aux2
+  (lambda (L1 L2)
+    (if (null? L2) '()
+        (cons (list L1 (car L2)) (cartesian-product-aux2 L1 (cdr L2))))))
+
+;========================================================
+
 ; PUNTO: 11
 ; Elabore una función llamada zip que recibe como entrada tres
 ; parámetros: una función binaria (función que espera recibir dos argumentos)
@@ -91,10 +114,6 @@
 ; recibido. Si el número n es encontrado en el nodo raíz, el procedimiento
 ; debe retornar una lista vacía.
 
-(define (my-append lista1 lista2)
-  (if (null? lista1)
-      lista2
-      (cons (car lista1) (my-append (cdr lista1) lista2))))
 
 (define (path n BST)
   (define (path-helper n BST current-path)

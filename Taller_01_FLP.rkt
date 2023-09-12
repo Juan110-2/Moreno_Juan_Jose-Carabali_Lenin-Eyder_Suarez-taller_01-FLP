@@ -28,7 +28,7 @@
 (define (down L)
   (if (null? L)
       '() ; Si la lista está vacía, retornamos una lista vacía.
-      (cons (list (car L)) (down (cdr L)))))
+      (cons (list (car L)) (down (cdr L))))) ; Se crea una lista con el primer elemento, se repite con el resto
 
 
 ;======================================================

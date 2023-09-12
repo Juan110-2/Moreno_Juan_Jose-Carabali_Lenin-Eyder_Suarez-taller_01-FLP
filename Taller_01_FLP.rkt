@@ -5,6 +5,12 @@
       lista2
       (cons (car lista1) (my-append (cdr lista1) lista2))))
 
+(define (my-length L1)
+  (if
+   (null? L1)
+     0
+    (+ 1 (my-length (cdr L1)))))
+
 ;PUNTO 1
 ;Elabore una función llamada invert que recibe un argumento:
 ;una lista L, sin embargo, esta lista L se compone de pares x; y que a su vez
@@ -16,7 +22,7 @@
     (if (null? L) '()
         (let*
             (
-             (head (car L)) ;tal vez se pueda quitar
+             (head (car L))
              (x (car head))
              (y (cadr head))
              )
@@ -113,11 +119,6 @@
 ; de aplicar la función F sobre los elementos en la posición n-ésima en L1 y
 ; L2.
 
-(define (my-length L1)
-  (if
-   (null? L1)
-     0
-    (+ 1 (my-length (cdr L1)))))
 
 (define (zip F L1 L2)
   (if (= (my-length L1) (my-length L2))

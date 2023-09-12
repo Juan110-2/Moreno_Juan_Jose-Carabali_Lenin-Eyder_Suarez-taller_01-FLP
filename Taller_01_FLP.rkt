@@ -11,7 +11,7 @@
     (if (null? L) '()
         (let*
             (
-             (head (car L)) ;tal vex se pueda quitar
+             (head (car L)) ;tal vez se pueda quitar
              (x (car head))
              (y (cadr head))
              )
@@ -43,6 +43,7 @@
     (if (null? L) '()
         (if (not (P (car L))) (filter-in P (cdr L))
            (cons (car L) (filter-in P (cdr L)))))))
+
 ;======================================================
 
 
@@ -61,3 +62,54 @@
       (else (list-index-helper (+ index 1) (cdr L)))))
 
   (list-index-helper 0 L))
+
+;======================================================
+
+; PUNTO: 11
+; Elabore una función llamada zip que recibe como entrada tres
+; parámetros: una función binaria (función que espera recibir dos argumentos)
+; F, y dos listas L1 y L2, ambas de igual tamaño. El procedimiento zip
+; debe retornar una lista donde la posición n-ésima corresponde al resultado
+; de aplicar la función F sobre los elementos en la posición n-ésima en L1 y
+; L2.
+
+(define (zip F L1 L2)
+  (if (= (length L1) (length L2))
+      (if (null? L1)
+          '()
+          (cons (F (car L1) (car L2)) (zip F (cdr L1) (cdr L2))))
+      '()))
+
+;======================================================
+
+; PUNTO: 14
+; Elabore una función llamada path que recibe como entrada dos
+; parámetros: un número n y un árbol binario de búsqueda (representado
+; con listas) BST (el árbol debe contener el número entero n). La función
+; debe retornar una lista con la ruta a tomar (iniciando desde el nodo raíz
+; del árbol), indicada por cadenas left y right, hasta llegar al número n
+; recibido. Si el número n es encontrado en el nodo raíz, el procedimiento
+; debe retornar una lista vacía.
+
+(define (my-append lista1 lista2)
+  (if (null? lista1)
+      lista2
+      (cons (car lista1) (my-append (cdr lista1) lista2))))
+
+(define (path n BST)
+  (define (path-helper n BST current-path)
+    (cond
+      ((null? BST) '()) ; Si el árbol está vacío, retornamos una lista vacía.
+      ((= n (car BST)) current-path) ; Si encontramos n, retornamos la ruta actual.
+      ((< n (car BST)) (path-helper n (cadr BST) (my-append current-path '(left)))) ; Si n es menor, vamos a la izquierda.
+      (else (path-helper n (caddr BST) (my-append current-path '(right)))))) ; Si n es mayor, vamos a la derecha.
+
+  (path-helper n BST '())) ; Iniciamos la búsqueda desde la raíz con una ruta vacía.
+
+;======================================================
+
+; PUNTO: 17
+; Elabore una función llamada (prod-scalar-matriz mat vec) que recibe una matriz mat
+; representada como una lista de listas y un vector vec representado como una lista,
+; y retorna el resultado de realizar la multiplicación matriz por vector.
+

@@ -88,6 +88,23 @@
 
 ;========================================================
 
+
+;PUNTO 10
+;Elabore una función llamada up que recibe como entrada una
+;lista L, y lo que debe realizar la función es remover un par de paréntesis a
+;cada elemento del nivel más alto de la lista. Si un elemento de este nivel
+;no es una lista (no tiene paréntesis), este elemento es incluido en la salida
+;resultante sin modfcación alguna.
+
+(define up
+  (lambda (L)
+    (cond
+      [(null? L) '()]
+      [(list? (car L)) (my-append (car L) (up (cdr L)))]
+      [else (cons (car L) (up (cdr L)))])))
+
+;========================================================
+
 ; PUNTO: 11
 ; Elabore una función llamada zip que recibe como entrada tres
 ; parámetros: una función binaria (función que espera recibir dos argumentos)

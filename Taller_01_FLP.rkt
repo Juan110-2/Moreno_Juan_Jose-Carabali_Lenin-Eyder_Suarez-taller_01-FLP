@@ -269,3 +269,33 @@
 ; Elabore una función llamada (prod-scalar-matriz mat vec) que recibe una matriz mat
 ; representada como una lista de listas y un vector vec representado como una lista,
 ; y retorna el resultado de realizar la multiplicación matriz por vector.
+
+
+;======================================================
+
+; PUNTO: 18
+;Elabore una función llamada (pascal N) que retorna la fila N
+;del triangulo de Pascal. A continuacíon se muestra las primeras cinco filas
+;del triangulo de Pascal:
+
+(define pascal
+  (lambda (n)
+    (if (= n 0)
+        (list 1)
+        (let* ((prev (pascal (- n 1)))
+               (prev-padded (append prev (list 0)))
+               (next-prev (append (list 0) prev))
+               (new-row '())
+               (i 0))
+          (letrec ((build-row
+                    (lambda ()
+                      (if (< i n)
+                          (begin
+                            (set! new-row
+                                  (append new-row
+                                          (list (+ (list-ref prev-padded i)
+                                                   (list-ref next-prev i)))))
+                            (set! i (+ i 1))
+                            (build-row))
+                          new-row))))
+            (build-row))))))

@@ -239,6 +239,30 @@
 
   (path-helper n BST '())) ; Iniciamos la búsqueda desde la raíz con una ruta vacía.
 
+;========================================================
+
+;PUNTO: 15
+;Elabore una función llamada (count-odd-and-even arbol) que
+;toma un  ́arbol binario y retorna una lista con dos elementos correspondientes
+;a la cantidad de pares e impares en arbol.
+
+
+(define count-odd-and-even
+  (lambda (arbol)
+    (define (count-odd-and-even-helper nodo)
+      (cond ((null? nodo) '(0 0))
+            (else
+             (let* ((left-counts (count-odd-and-even-helper (cadr nodo)))
+                    (right-counts (count-odd-and-even-helper (caddr nodo)))
+                    (current-counts
+                     (if (odd? (car nodo))
+                         (list (+ 1 (car left-counts) (car right-counts))
+                               (+ (cadr left-counts) (cadr right-counts)))
+                         (list (+ (car left-counts) (car right-counts))
+                               (+ 1 (cadr left-counts) (cadr right-counts))))))
+               current-counts))))
+    (count-odd-and-even-helper arbol)))
+
 ;======================================================
 
 ; PUNTO: 17

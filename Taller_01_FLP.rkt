@@ -1,10 +1,7 @@
 #lang eopl
 ; Juan José Moreno Jaramillo 2310038-3743
-; Eyder Santiago Suárez
-; Lenin Esteban Carabali Moreno
-
-
-;; Funciones adicionales (auxiliares que usamos para el desarrollo del taller)
+; Eyder Santiago Suárez Chávez 2322714-3743
+; Lenin Esteban Carabali Moreno 2310025-3743
 
 ; Propósito: concatenar dos listas en una sola
 (define (my-append lista1 lista2)
@@ -70,6 +67,27 @@
 (down '((una) (buena) (idea)))
 (down '(un (objeto (mas)) complicado))
 
+
+
+;======================================================
+
+;PUNTO: 3
+; Elabore una función llamada list-set que reciba tres argumentos:
+; una lista L, un número n y un elemento x. La función debe retornar una
+; lista similar a la que recibe (L), pero debe tener en la posición ingresada n
+; (indexando desde cero) el elemento x. Ejemplos:
+
+
+; list-set: list number any -> list
+; Retorna una lista igual a L, pero con el elemento x en la posición n
+(define (list-set L n x)
+  (cond
+    [(null? L) '()] ; Si la lista está vacía, se retorna la lista vacía
+    [(= n 0) (cons x (cdr L))] ; Si n es cero, se reemplaza el primer elemento de L por x
+    [else (cons (car L) (list-set (cdr L) (- n 1) x))] ; Si no, se conserva el primer elemento de L y se aplica la función recursivamente al resto de L, decrementando n en uno
+  )
+)
+
 ;======================================================
 
 ; PUNTO: 4
@@ -118,7 +136,32 @@
 
 ;======================================================
 
-; PUNTO 7
+;PUNTO: 6
+; Elabore una función llamada swapper que recibe 3 argumentos:
+; un elemento E1, otro elemento E2, y una lista L. La función retorna una lista
+; similar a L, sólo que cada ocurrencia anterior de E1 será reemplazada por E2
+; y cada ocurrencia anterior de E2 ser ́a reemplazada por E1 (Los elementos
+; E1 y E2 deben pertenecer a L)
+; car devuelve el primer valor de la lista
+
+
+(define (swapper E1 E2 l)
+  (cond [(null? l) '()] ; Si la lista está vacía, devolver una lista vacía
+        [(equal? E1 (car l)) (cons E2 (swapper E1 E2 (cdr l)))] ; Si el primer elemento de la lista 'L' es igual a e1, reemplazarlo por e2 y seguir con el resto de la lista
+        [(equal? E2 (car l)) (cons E1 (swapper E1 E2 (cdr l)))] ; Si el primer elemento de la lista 'L' es igual a e2, reemplazarlo por e1 y seguir con el resto de la lista
+        [else (cons (car l) (swapper E1 E2 (cdr l)))] ; Si el primer elemento no es ni e1 ni e2, mantenerlo y seguir con el resto de la lista
+        ))
+
+
+
+;======================================================
+
+; PUNTO: 7
+; Elabore una función llamada cartesian-product que recibe como
+; argumentos 2 listas de símbolos sin repeticiones L1 y L2. La función debe
+; retornar una lista de tuplas que representen el producto cartesiano entre L1
+; y L2. Los pares pueden aparecer en cualquier orden.
+
 ; cartesian-product
 ; uso ( cartesian-product L1 L1) -> El propósito de 
 ; la función cartesian-product es calcular y 
@@ -170,6 +213,28 @@
 
 ;========================================================
 
+; PUNTO: 9
+
+; Elabore una función llamada inversions que recibe como entrada
+; una lista L, y determina el ńumero de inversiones de la lista L. De manera formal, sea A = (a1a2...an)
+; una lista de n n ́umeros diferentes, si i < j (posici ́on)
+; y ai > aj (dato en la posición) entonces la pareja (i j) es una inversión de A.
+
+
+(define (inversions L)
+  (define (count-inversions x lst)
+    (cond [(null? lst) 0] ; si la lista está vacía, no hay inversiones
+           [(> x (car lst)) (+ 1 (count-inversions x (cdr lst)))] ; si el elemento es mayor que el primero de la lista, hay una inversión y se sigue con el resto de la lista
+          [else (count-inversions x (cdr lst))] ; si el elemento es menor o igual que el primero de la lista, no hay inversión y se sigue con el resto de la lista
+          )) (cond [(null? L) 0] ; si la lista está vacía, no hay inversiones
+                    [else (+ (count-inversions (car L) (cdr L)) ; se cuentan las inversiones del primer elemento con el resto de la lista
+                             (inversions (cdr L)))] ; se suman las inversiones del resto de la lista
+) )
+
+
+
+;========================================================
+
 ; PUNTO: 10
 ; up
 ; uso (up L) -> El propósito de la función up es eliminar un par de paréntesis 
@@ -208,6 +273,33 @@
 ; Pruebas
 (zip + '(1 4) '(6 2))
 (zip * '(11 5 6) '(10 9 8))
+
+;======================================================
+
+; PUNTO 12
+; Elabore una función llamada filter-acum que recibe como entrada 5 par ́ametros: dos n ́umeros a y b, una función binaria F, un valor inicial
+; acum y una funci ́on unaria filter. El procedimiento filter-acum aplicar ́a la
+; función binaria F a todos los elementos que est ́an en el intervalo [a, b] y que
+; a su vez todos estos elementos cumplen con el predicado de la funci ́on filter,
+; el resultado se debe ir conservando en acum y debe retornarse el valor final
+; de acum. E
+
+
+(define (filter-acum a b F acum filter)
+  (define (accumulate-from-a-to-b current-accumulator current-element)
+    (cond ((and (>= current-element a)
+                 (<= current-element b)
+                 (filter current-element))
+           (F current-accumulator current-element))
+          (else current-accumulator)))
+  
+  (define (iter current-element current-accumulator)
+    (cond ((> current-element b)
+           current-accumulator)
+          (else
+           (iter (+ current-element 1) (accumulate-from-a-to-b current-accumulator current-element)))))
+  
+  (iter a acum))
 
 ;======================================================
 
@@ -260,6 +352,34 @@
 (26 (20 (17 () ())
 ())
 (31 () ()))))
+
+
+;======================================================
+
+; PUNTO: 15
+
+;Elabore una función llamada (count-odd-and-even arbol) que
+;toma un  ́arbol binario y retorna una lista con dos elementos correspondientes
+;a la cantidad de pares e impares en arbol.
+
+
+(define count-odd-and-even
+  (lambda (arbol)
+    (define (count-odd-and-even-helper nodo)
+      (cond ((null? nodo) '(0 0))
+            (else
+             (let* ((left-counts (count-odd-and-even-helper (cadr nodo)))
+                    (right-counts (count-odd-and-even-helper (caddr nodo)))
+                    (current-counts
+                     (if (odd? (car nodo))
+                         (list (+ 1 (car left-counts) (car right-counts))
+                               (+ (cadr left-counts) (cadr right-counts)))
+                         (list (+ (car left-counts) (car right-counts))
+                               (+ 1 (cadr left-counts) (cadr right-counts))))))
+               current-counts))))
+    (count-odd-and-even-helper arbol)))
+
+
 
 ;======================================================
 
@@ -318,3 +438,38 @@
 ;pruebas
 (prod-scalar-matriz '((1 1) (2 2)) '(2 3))
 (prod-scalar-matriz '((1 1) (2 2) (3 3)) '(2 3))
+
+
+
+;=====================================================
+
+; PUNTO 18
+; Elabore una función llamada (pascal N) que retorna la fila N
+; del triangulo de Pascal. A continuacíon se muestra las primeras cinco filas
+; del triangulo de Pascal:
+
+(define pascal
+  (lambda (n)
+    (define (get-element lst index)
+      (if (= index 0)
+          (car lst)
+          (get-element (cdr lst) (- index 1))))
+    
+    (define (build-row prev prev-padded next-prev new-row i)
+      (cond ((< i n)
+             (build-row prev prev-padded next-prev
+                        (my-append new-row
+                                   (list (+ (get-element prev-padded i)
+                                            (get-element next-prev i))))
+                        (+ i 1)))
+            (else new-row)))
+    
+    (cond ((= n 0)
+           (list 1))
+          (else
+           (let* ((prev (pascal (- n 1)))
+                  (prev-padded (my-append prev (list 0)))
+                  (next-prev (my-append (list 0) prev))
+                  (new-row '())
+                  (i 0))
+             (build-row prev prev-padded next-prev new-row i))))))

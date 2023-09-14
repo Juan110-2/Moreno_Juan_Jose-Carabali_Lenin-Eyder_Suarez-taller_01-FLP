@@ -28,6 +28,11 @@
              )
           (cons (list y x) (invert (cdr L)) )))))
 
+;pruebas
+(invert '((a 1) (a 2) (1 b) (2 b)))
+(invert '((5 9) (10 91) (82 7) (a e) ("hola" "Mundo")))
+(invert '(("es" "racket") ("genial" "muy") (17 29) (81 o)))
+
 ;======================================================
 
 ; PUNTO: 2
@@ -41,6 +46,10 @@
       '() ; Si la lista está vacía, retornamos una lista vacía.
       (cons (list (car L)) (down (cdr L))))) ; Se crea una lista con el primer elemento, se repite con el resto
 
+;pruebas
+(down '(1 2 3))
+(down '((una) (buena) (idea)))
+(down '(un (objeto (mas)) complicado))
 
 ;======================================================
 
@@ -54,6 +63,11 @@
     (if (null? L) '()
         (if (not (P (car L))) (filter-in P (cdr L))
            (cons (car L) (filter-in P (cdr L)))))))
+
+;Pruebas
+(filter-in number? '(a 2 (1 3) b 7))
+(filter-in symbol? '(a (b c) 17 foo))
+(filter-in string? '(a b u "univalle" "racket" "flp" 28 90 (1 2 3)))
 
 ;======================================================
 
@@ -74,6 +88,11 @@
 
   (list-index-helper 0 L))
 
+;Pruebas
+(list-index number? '(a 2 (1 3) b 7))
+(list-index symbol? '(a (b c) 17 foo))
+(list-index symbol? '(1 2 (a b) 3))
+
 ;======================================================
 
 ;PUNTO 7
@@ -91,9 +110,11 @@
   (lambda (L1 L2)
     (if (null? L2) '()
         (cons (list L1 (car L2)) (cartesian-product-aux2 L1 (cdr L2))))))
+;Pruebas
+(cartesian-product '(a b c) '(x y))
+(cartesian-product '(p q r) '(5 6 7))
 
 ;========================================================
-
 
 ;PUNTO 10
 ;Elabore una función llamada up que recibe como entrada una
@@ -109,6 +130,10 @@
       [(list? (car L)) (my-append (car L) (up (cdr L)))]
       [else (cons (car L) (up (cdr L)))])))
 
+;Pruebas
+(up '((1 2) (3 4)))
+(up '((x (y)) z))
+
 ;========================================================
 
 ; PUNTO: 11
@@ -119,13 +144,16 @@
 ; de aplicar la función F sobre los elementos en la posición n-ésima en L1 y
 ; L2.
 
-
 (define (zip F L1 L2)
   (if (= (my-length L1) (my-length L2))
       (if (null? L1)
           '()
           (cons (F (car L1) (car L2)) (zip F (cdr L1) (cdr L2))))
       '()))
+
+;Pruebas
+(zip + '(1 4) '(6 2))
+(zip * '(11 5 6) '(10 9 8))
 
 ;======================================================
 
@@ -149,6 +177,12 @@
 
   (path-helper n BST '())) ; Iniciamos la búsqueda desde la raíz con una ruta vacía.
 
+;Pruebas
+(path 17 '(14 (7 () (12 () ()))
+(26 (20 (17 () ())
+())
+(31 () ()))))
+
 ;======================================================
 
 ; PUNTO: 17
@@ -156,3 +190,20 @@
 ; representada como una lista de listas y un vector vec representado como una lista,
 ; y retorna el resultado de realizar la multiplicación matriz por vector.
 
+(define prod-scalar-matriz-aux
+  (lambda (fila vec)
+    (if (or (null? fila) (null? vec))
+        '()
+        (cons (* (car fila) (car vec))
+              (prod-scalar-matriz-aux (cdr fila) (cdr vec))))))
+
+(define prod-scalar-matriz
+  (lambda (mat vec)
+    (if (or (null? mat) (null? vec))
+        '() ; Si la matriz o el vector están vacíos, el resultado es una lista vacía.
+        (cons (prod-scalar-matriz-aux (car mat) vec)
+              (prod-scalar-matriz (cdr mat) vec)))))
+
+;pruebas
+(prod-scalar-matriz '((1 1) (2 2)) '(2 3))
+(prod-scalar-matriz '((1 1) (2 2) (3 3)) '(2 3))

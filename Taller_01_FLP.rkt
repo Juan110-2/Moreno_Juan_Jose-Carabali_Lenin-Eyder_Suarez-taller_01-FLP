@@ -157,6 +157,32 @@
 
 ;======================================================
 
+;PUNTO 13 
+;Elabore una función llamada (operate lrators lrands) donde
+;lrators es una lista de funciones binarias de tamaño n y lrands es una lista
+;de números de tama~no n + 1. La función retorna el resultado de aplicar
+;sucesivamente las operaciones en lrators a los valores en lrands.
+
+(define operate
+  (lambda (lrators lrands)
+    (operate-aux (rev lrators) (rev lrands))))
+
+(define operate-aux
+  (lambda (lrators-rev lrands-rev)
+    (if (null? lrators-rev)
+        (car lrands-rev)
+        (let
+            (
+             (operator (car lrators-rev))
+             (number (car lrands-rev))
+             )
+          (operator (operate-aux (cdr lrators-rev) (cdr lrands-rev)) number)))))
+
+(define (rev lst)
+ (if (null? lst)
+     '() (my-append (rev (cdr lst)) (list (car lst)))))
+
+;======================================================
 ; PUNTO: 14
 ; Elabore una función llamada path que recibe como entrada dos
 ; parámetros: un número n y un árbol binario de búsqueda (representado
@@ -182,6 +208,33 @@
 (26 (20 (17 () ())
 ())
 (31 () ()))))
+
+;======================================================
+
+Dada la siguiente gramática sobre operaciones binarias:
+<OperacionB>::= <int>
+            ::= (<OperacionB> 'suma <OperacionB>)
+            ::= (<OperacionB> 'resta <OperacionB>)
+            ::= (<OperacionB> 'multiplica <OperacionB>)
+
+Implementa una funcioó llamada (Operar-binarias operacionB) que recibe
+como parámetro una operación binaria válida y retorna el resultado de hacer
+las operaciones suma, resta y multiplicaciónn correspondientes.
+
+
+(define (Operar-binarias operacion)
+  (cond
+    [(number? operacion) operacion] ; Si es un número, simplemente lo retornamos
+    [(list? operacion)
+     (let ((izquierda (car operacion))
+           (operador (cadr operacion))
+           (derecha (caddr operacion)))
+       (cond
+         [(eq? operador 'suma) (+ (Operar-binarias izquierda) (Operar-binarias derecha))]
+         [(eq? operador 'resta) (- (Operar-binarias izquierda) (Operar-binarias derecha))]
+         [(eq? operador 'multiplica) (* (Operar-binarias izquierda) (Operar-binarias derecha))]
+         [else ("Operador desconocido")]))]
+    [else ("Operación no válida")]))
 
 ;======================================================
 

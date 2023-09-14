@@ -1,5 +1,8 @@
 #lang eopl
 
+
+;; Funciones adicionales (auxiliares que usamos para el desarrollo del taller)
+
 (define (my-append lista1 lista2)
   (if (null? lista1)
       lista2
@@ -11,11 +14,18 @@
      0
     (+ 1 (my-length (cdr L1)))))
 
-;PUNTO 1
-;Elabore una función llamada invert que recibe un argumento:
-;una lista L, sin embargo, esta lista L se compone de pares x; y que a su vez
-;son listas (de tama~no 2). La función debe retornar una lista similar a L, con
-;pares ordenados invertidos, es decir, y; x.
+; PUNTO 1
+; invert:
+; uso ( invert L) -> El propósito de la función invert es tomar una lista
+; de pares representados como listas de dos elementos 
+; (x, y) y devolver una nueva lista con los pares invertidos,
+; es decir, en el orden (y, x).
+;
+; invert : L -> L'
+; 
+;  <list> ::= '() 
+;         ::= ((<scheme-value> <scheme-value>) <list>)
+
 
 (define invert
   (lambda (L)
@@ -45,9 +55,17 @@
 ;======================================================
 
 ; PUNTO: 4
-;Elabore una funciónn llamada filter-in que debe recibir dos argumentos:
-;un predicado P y una lista L. La función retorna una lista que
-;contiene los elementos que pertenecen a L y que satisfacen el predicado P. 
+; filter-in
+; uso ( filter-in P L) ->  El propósito de la
+; función filter-in es crear una nueva lista
+; que contiene elementos de la lista original L que 
+; satisfacen un predicado P
+;
+; filter-in : P x L -> L'
+; 
+;  <list> ::= '()
+;         ::= <scheme-value> <list>
+
 
 (define filter-in
   (lambda (P L)
@@ -76,11 +94,18 @@
 
 ;======================================================
 
-;PUNTO 7
-;Elabore una función llamada cartesian-product que recibe como
-;argumentos 2 listas de símbolos sin repeticiones L1 y L2. La función debe
-;retornar una lista de tuplas que representen el producto cartesiano entre L1
-;y L2. Los pares pueden aparecer en cualquier orden.
+; PUNTO 7
+; cartesian-product
+; uso ( cartesian-product L1 L1) -> El propósito de 
+; la función cartesian-product es calcular y 
+; proporcionar una lista de todas las posibles combinaciones de 
+; elementos entre dos conjuntos representados por las listas L1 y 
+; L2, devolviendo estas combinaciones como tuplas en una lista.
+;
+; cartesian-product : L1 x L2 -> L3 tal que { (x, y) | x ∈ L1, y ∈ L2 }
+; 
+;  <list> ::= '() 
+;         ::= ((<int | symbol> <int | symbol>) <list>)
 
 (define cartesian-product
   (lambda (L1 L2)
@@ -95,12 +120,15 @@
 ;========================================================
 
 
-;PUNTO 10
-;Elabore una función llamada up que recibe como entrada una
-;lista L, y lo que debe realizar la función es remover un par de paréntesis a
-;cada elemento del nivel más alto de la lista. Si un elemento de este nivel
-;no es una lista (no tiene paréntesis), este elemento es incluido en la salida
-;resultante sin modfcación alguna.
+; PUNTO 10
+; up
+; uso (up L) -> El propósito de la función up es eliminar un par de paréntesis 
+; de cada elemento del nivel superior de una lista
+;
+; up : L -> L'
+; 
+; <list>  ::= '() 
+;         ::= (<scheme-value> <list>)
 
 (define up
   (lambda (L)

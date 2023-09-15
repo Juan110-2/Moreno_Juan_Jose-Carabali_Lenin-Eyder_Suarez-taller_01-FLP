@@ -3,19 +3,37 @@
 ; Eyder Santiago Suárez Chávez 2322714-3743
 ; Lenin Esteban Carabali Moreno 2310025-3743
 
-; Propósito: concatenar dos listas en una sola
-; my-append : (list 'a) (list 'b) -> (list 'a+'b) 
+; Uso (my-append L1 L2) -> Propósito: concatenar dos listas en una sola
+;
+; L1 L2 -> L3
+;
+;  <list> ::= '() 
+;         ::= ((<scheme-value>) <list1>) (<scheme-value>) <list2>))
+
 (define (my-append lista1 lista2)
   (cond
     ((null? lista1) lista2)
     (else (cons (car lista1) (my-append (cdr lista1) lista2)))))
 
-; Propósito: retornar la longitud de una lista
+; pruebas
+(my-append '((a 1) (a 2)) '((1 b) (2 b)))
+(my-append '("hola") '("Mundo"))
+
+; Uso (my-length L1) -> Propósito: retornar la longitud de una lista
+;
 ; my-length : (list 'a) -> integer
+;
+;  <list> ::= '() 
+;         ::= ((<scheme-value>) <list>)
+
 (define (my-length L1)
   (cond
     ((null? L1) 0)
     (else (+ 1 (my-length (cdr L1))))))
+
+; pruebas
+(my-length '((a 1) (a 2) (1 b) (2 b)))
+(my-length '("hola" "Mundo"))
 
 ; PUNTO 1
 ; invert:

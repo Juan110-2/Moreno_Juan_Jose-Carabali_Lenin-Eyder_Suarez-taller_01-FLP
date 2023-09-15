@@ -99,13 +99,20 @@
 ;======================================================
 
 ;PUNTO: 3
-; Elabore una función llamada list-set que reciba tres argumentos:
-; una lista L, un número n y un elemento x. La función debe retornar una
-; lista similar a la que recibe (L), pero debe tener en la posición ingresada n
-; (indexando desde cero) el elemento x. Ejemplos:
+
+; list-set:
+; uso (list-set L n x) -> El propósito de la función list-set es recibir una lista L, un número n
+; y un elemento x, (L n x). La entrada n define la posición (empezando en cero) en la que estará
+; anidada el elemento x dentro de la lista L que el programa retorne.
+
+; list-set : L n x -> (Ln(x)L)
+
+; (<List> <Integer> <List>) :: '()
+;                           :: (<List(<scheme-value>)> )
 
 
-; list-set: list number any -> list'
+
+; list-set: list number any -> list
 ; Retorna una lista igual a L, pero con el elemento x en la posición n
 (define (list-set L n x)
   (cond
@@ -114,6 +121,10 @@
     [else (cons (car L) (list-set (cdr L) (- n 1) x))] ; Si no, se conserva el primer elemento de L y se aplica la función recursivamente al resto de L, decrementando n en uno
   )
 )
+
+; Pruebas
+(list-set '(a b c d) 2 '(1 2))
+(list-set '(a b c d) 3 '(a b))
 
 ;======================================================
 
@@ -171,21 +182,29 @@
 ;======================================================
 
 ;PUNTO: 6
-; Elabore una función llamada swapper que recibe 3 argumentos:
-; un elemento E1, otro elemento E2, y una lista L. La función retorna una lista
-; similar a L, sólo que cada ocurrencia anterior de E1 será reemplazada por E2
-; y cada ocurrencia anterior de E2 ser ́a reemplazada por E1 (Los elementos
-; E1 y E2 deben pertenecer a L)
-; car devuelve el primer valor de la lista
+; swapper:
+; uso (swapper E1 E2 L) -> El propósito de la función swapper es tomar dos expresiones (E1 E2), y una lista (L),
+; la lista admite solo expresiones de E1 y E2. Devuelve dentro de la lista L, las expresiones de tipo E1
+; intercambiadas con las expresiones de tipo E2, es decir (E1 E2 '(E1 E2 E2 E1)) -> '(E2 E1 E1 E2).
+
+; swapper : E1 E2 L -> 'L
+
+; (<Expresion> <Expresion> <List>) ::
+;                                  :: (<List(<Expresion> <Expresion>)> 
 
 
-(define (swapper E1 E2 l)
-  (cond [(null? l) '()] ; Si la lista está vacía, devolver una lista vacía
-        [(equal? E1 (car l)) (cons E2 (swapper E1 E2 (cdr l)))] ; Si el primer elemento de la lista 'L' es igual a e1, reemplazarlo por e2 y seguir con el resto de la lista
-        [(equal? E2 (car l)) (cons E1 (swapper E1 E2 (cdr l)))] ; Si el primer elemento de la lista 'L' es igual a e2, reemplazarlo por e1 y seguir con el resto de la lista
-        [else (cons (car l) (swapper E1 E2 (cdr l)))] ; Si el primer elemento no es ni e1 ni e2, mantenerlo y seguir con el resto de la lista
+(define (swapper E1 E2 L)
+  (cond [(null? L) '()] ; Si la lista está vacía, devolver una lista vacía
+        [(equal? E1 (car L)) (cons E2 (swapper E1 E2 (cdr L)))] ; Si el primer elemento de la lista 'L' es igual a e1, reemplazarlo por e2 y seguir con el resto de la lista
+        [(equal? E2 (car L)) (cons E1 (swapper E1 E2 (cdr L)))] ; Si el primer elemento de la lista 'L' es igual a e2, reemplazarlo por e1 y seguir con el resto de la lista
+        [else (cons (car L) (swapper E1 E2 (cdr L)))] ; Si el primer elemento no es ni e1 ni e2, mantenerlo y seguir con el resto de la lista
         ))
 
+
+; pruebas
+(swapper 'a 'd '(a b c d))
+(swapper 'a 'd '(a d () c d))
+(swapper 'x 'y '(y y x y x y x x y))
 ;======================================================
 
 ; PUNTO: 7
@@ -272,10 +291,25 @@
 ;========================================================
 
 ; PUNTO: 9
-; Elabore una función llamada inversions que recibe como entrada
-; una lista L, y determina el ńumero de inversiones de la lista L. De manera formal, sea A = (a1a2...an)
-; una lista de n n ́umeros diferentes, si i < j (posici ́on)
-; y ai > aj (dato en la posición) entonces la pareja (i j) es una inversión de A.
+
+; inversions:
+
+; uso (inversions L) -> El propósito de la función inversions es tomar una lista y determinar su número de
+; inversiones, se contará como inversión si cumple el requisito que el valor ingresado dentro de la lista sea
+; menor al número de la posición de la lista siguiente "i < j" en el extremo izquierdo, e "ai > aj" sea menor 
+; que el número siguiente en el extremo derecho.
+
+; inversions : L
+
+
+; inversions <list L> -> <integer result>
+; <list> :: 0
+;        :: (<integer>)
+
+; <count-inversions> <integer x> <list lst> :: 0
+;                                           :: (<integer>)
+
+
 
 
 (define (inversions L)
@@ -287,6 +321,12 @@
                     [else (+ (count-inversions (car L) (cdr L)) ; se cuentan las inversiones del primer elemento con el resto de la lista
                              (inversions (cdr L)))] ; se suman las inversiones del resto de la lista
 ) )
+
+
+
+; Pruebas
+(inversions '(2 3 8 6 1))
+(inversions '(1 2 3 2 1))
 
 
 
@@ -344,12 +384,21 @@
 ;======================================================
 
 ; PUNTO 12
-; Elabore una función llamada filter-acum que recibe como entrada 5 par ́ametros: dos n ́umeros a y b, una función binaria F, un valor inicial
-; acum y una funci ́on unaria filter. El procedimiento filter-acum aplicar ́a la
-; función binaria F a todos los elementos que est ́an en el intervalo [a, b] y que
-; a su vez todos estos elementos cumplen con el predicado de la funci ́on filter,
-; el resultado se debe ir conservando en acum y debe retornarse el valor final
-; de acum. E
+; filter-acum: 
+; Uso (filter-acum a b F acum filter) -> El propósito de la función filter-acum es aplicar a la
+; función binaria F a todos los elementos que est ́an en el intervalo [a, b], y que cumplan todo el 
+; predicado de la función filter, si se cumple el resultado se irá guardando en la variable acum
+; y que devuelva al final el valor de acum
+
+; filter-acum <integer a> <integer b> <binary function F> <integer acum> <predicate function filter> -> <integer result>
+
+; <accumulate-from-a-to-b> ::= <integer acum>
+;                          ::= <integer element>
+
+; <iter> ::= <integer acum>
+;                          ::= <integer element>
+
+
 
 
 (define (filter-acum a b F acum filter)
@@ -367,6 +416,13 @@
            (iter (+ current-element 1) (accumulate-from-a-to-b current-accumulator current-element)))))
   
   (iter a acum))
+
+
+; Pruebas
+ (filter-acum 1 10 + 0 odd?)
+ (filter-acum 1 10 + 0 even?)
+
+
 
 ;======================================================
 

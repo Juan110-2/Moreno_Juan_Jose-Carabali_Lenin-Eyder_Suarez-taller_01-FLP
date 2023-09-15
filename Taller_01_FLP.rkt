@@ -18,8 +18,8 @@
     (else (cons (car lista1) (my-append (cdr lista1) lista2)))))
 
 ; pruebas
-(my-append '((a 1) (a 2)) '((1 b) (2 b)))
-(my-append '("hola") '("Mundo"))
+(my-append '((a 1) (a 2)) '((1 b) (2 b))) ; salida -> ((a 1) (a 2) (1 b) (2 b))
+(my-append '("hola") '("Mundo")); salida -> ("hola" "Mundo")
 
 ;======================================================
 
@@ -36,8 +36,8 @@
     (else (+ 1 (my-length (cdr L1))))))
 
 ; pruebas
-(my-length '((a 1) (a 2) (1 b) (2 b)))
-(my-length '("hola" "Mundo"))
+(my-length '((a 1) (a 2) (1 b) (2 b))) ; salida -> 4
+(my-length '("hola" "Mundo")) ; salida -> 2
 
 ;======================================================
 
@@ -70,9 +70,9 @@
           (cons (list y x) (invert (cdr L))))])))
 
 ; pruebas
-(invert '((a 3) (b 8) (1 e) (f k))) 
-(invert '((3 9) (1 91) ("h" r) (x e) ("h" "w"))) 
-(invert '(("es" "racket") ("genial" "muy") (17 29) (81 o)))
+(invert '((a 3) (b 8) (1 e) (f k)))  ; salida -> ((3 a) (8 b) (e 1) (k f))
+(invert '((3 9) (1 91) ("h" r) (x e) ("h" "w"))) ; salida -> ((9 3) (91 1) (r "h") (e x) ("w" "h"))
+(invert '(("es" "racket") ("genial" "muy") (17 29) (81 o))); salida -> (("racket" "es") ("muy" "genial") (29 17) (o 81))
 
 ;======================================================
 
@@ -91,10 +91,10 @@
     (else (cons (list (car L)) (down (cdr L))))))
 
 ; pruebas
-(down '(1 2 3))
-(down '((una) (buena) (idea)))
-(down '(un (objeto (mas)) complicado))
-(down '(una (estructura (de (datos (anidada))))))
+(down '(1 2 3))  ; salida -> ((1) (2) (3))
+(down '((una) (buena) (idea))) ; salida -> (((una)) ((buena)) ((idea)))
+(down '(un (objeto (mas)) complicado)) ; salida -> ((un) ((objeto (mas))) (complicado))
+(down '(una (estructura (de (datos (anidada)))))) ; salida -> ((una) ((estructura (de (datos (anidada))))))
 
 ;======================================================
 
@@ -138,9 +138,9 @@
 
 
 ; Pruebas
-(filter-in number? '(a 2 (1 3) b 7 y ((a)))) 
-(filter-in symbol? '(a 2 (1 3) b 7 y ((a)))) 
-(filter-in string? '(a 2 (1 3) b 7 y ((a)))) 
+(filter-in number? '(a 2 (1 3) b 7 y ((a))))  ; salida -> (2 7)
+(filter-in symbol? '(a 2 (1 3) b 7 y ((a))))  ; salida -> (a b y)
+(filter-in string? '(a 2 (1 3) b 7 y ((a))))  ; salida -> ()
 
 ;======================================================
 
@@ -163,10 +163,10 @@
   (list-index-helper 0 L))
 
 ; Pruebas
-(list-index number? '(a 2 (1 3) b 7))
-(list-index symbol? '(a (b c) 17 foo))
-(list-index symbol? '(1 2 (a b) 3))
-(list-index list? '(1 2 (a b) (x y z) 3))
+(list-index number? '(a 2 (1 3) b 7)) ; salida -> 1
+(list-index symbol? '(a (b c) 17 foo)) ; salida -> 0
+(list-index symbol? '(1 2 (a b) 3)) ; salida -> #f
+(list-index list? '(1 2 (a b) (x y z) 3)) ; salida -> 2
 
 ;======================================================
 
@@ -206,9 +206,9 @@
         (cons (list L1 (car L2)) (cartesian-product-aux2 L1 (cdr L2))))))
 
 ; Pruebas
-(cartesian-product-aux2 'a '(x y)) 
-(cartesian-product-aux2 'r '(5 6 7)) 
-(cartesian-product-aux2 'j '(2 0))
+(cartesian-product-aux2 'a '(x y)) ; salida -> ((a x) (a y))
+(cartesian-product-aux2 'r '(5 6 7)) ; salida -> ((r 5) (r 6) (r 7))
+(cartesian-product-aux2 'j '(2 0)) ; salida -> ((j 2) (j 0))
 
 ; cartesian-product
 ; uso ( cartesian-product L1 L1) -> El propósito de 
@@ -230,9 +230,9 @@
         (my-append (cartesian-product-aux2 (car L1) L2) (cartesian-product (cdr L1) L2)))))
 
 ; Pruebas
-(cartesian-product '(a b c) '(x y)) 
-(cartesian-product '(p q r) '(5 6 7)) 
-(cartesian-product '(a "as" c) '(2 0))
+(cartesian-product '(a b c) '(x y)) ; salida -> ((a x) (a y) (b x) (b y) (c x) (c y))
+(cartesian-product '(p q r) '(5 6 7)) ; salida -> ((p 5) (p 6) (p 7) (q 5) (q 6) (q 7) (r 5) (r 6) (r 7))
+(cartesian-product '(a "as" c) '(2 0)) ; salida -> ((a 2) (a 0) ("as" 2) ("as" 0) (c 2) (c 0))
 
 
 ;======================================================
@@ -264,10 +264,10 @@
      (mapping F (cdr L1) (cdr L2))))))           
 
 ;Pruebas
-(mapping (lambda (d) (* d 2)) (list 1 2 3) (list 2 4 6))
-(mapping (lambda (d) (* d 3)) (list 1 2 2) (list 2 4 6))
-(mapping (lambda (d) (* d 2)) (list 1 2 3) (list 3 9 12))
-(mapping (lambda (d) (+ d 10)) (list 1 2 3 4) (list 5 6 7 8))
+(mapping (lambda (d) (* d 2)) (list 1 2 3) (list 2 4 6)) ; salida -> ((1 2) (2 4) (3 6))
+(mapping (lambda (d) (* d 3)) (list 1 2 2) (list 2 4 6)) ; salida -> ((2 6))
+(mapping (lambda (d) (* d 2)) (list 1 2 3) (list 3 9 12)) ; salida -> ()
+(mapping (lambda (d) (+ d 10)) (list 1 2 3 4) (list 5 6 7 8)) ; salida -> ()
 
 ;========================================================
 
@@ -311,9 +311,9 @@
 
 ; Pruebas
 
-(up '((1 a) (z y 4))) 
-(up '((x (y)) z ("hola")))
-(up '(a (2 4) 9 ((s))))
+(up '((1 a) (z y 4)))  ; salida -> (1 a z y 4)
+(up '((x (y)) z ("hola"))) ; salida -> (x (y) z "hola")
+(up '(a (2 4) 9 ((s)))) ; salida -> (a 2 4 9 (s))
 
 ;========================================================
 
@@ -337,9 +337,9 @@
     (else '())))
 
 ; Pruebas
-(zip + '(1 4) '(6 2))
-(zip * '(11 5 6) '(10 9 8))
-(zip / '(10 25 18) '(5 5 6))
+(zip + '(1 4) '(6 2))  ; salida -> (7 6)
+(zip * '(11 5 6) '(10 9 8)) ; salida -> (110 45 48)
+(zip / '(10 25 18) '(5 5 6)) ; salida -> (2 5 3)
 
 ;======================================================
 
@@ -394,6 +394,9 @@
              )
           (operator (operate-aux (cdr lrators-rev) (cdr lrands-rev)) number)))))
 
+; Pruebas
+(operate-aux (list / * -) '(4 4 7 8)) ; salida -> 1 (opera de atras hacia delante)
+(operate-aux (list * * -) '(4 5 7 8)) ; salida -> 20
 ; El proposito de esta fucnión auxiliar es revertir la lista para poder organizar
 ; el orden en que se ejecutan las operciones por la jerarquia en matematicas.
 ;
@@ -405,8 +408,8 @@
  (if (null? lst)
      '() (my-append (rev (cdr lst)) (list (car lst)))))
 
-(rev '(1 2 3 4))
-(rev '(3 4 7 1))
+(rev '(1 2 3 4)) ; salida -> (4 3 2 1)
+(rev '(3 4 7 1)) ; salida -> (1 7 4 3)
 
 
 ; operate 
@@ -431,9 +434,9 @@
 
 ;Pruebas
 
-(operate (list + * + - *) '(1 2 8 4 11 6)) 
-(operate (list * * -) '(4 5 7 8)) 
-(operate (list / * -) '(4 4 7 8))
+(operate (list + * + - *) '(1 2 8 4 11 6)) ; salida -> 102
+(operate (list * * -) '(4 5 7 8)) ; salida -> 132
+(operate (list / * -) '(4 4 7 8)) ; salida -> -1
 
 
 ;======================================================
@@ -465,12 +468,12 @@
 (path 17 '(14 (7 () (12 () ()))
 (26 (20 (17 () ())
 ())
-(31 () ()))))
+(31 () ()))))  ; salida -> (right left left)
 
 (path 12 '(14 (7 () (12 () ()))
 (26 (20 (17 () ())
 ())
-(31 () ()))))
+(31 () ())))) ; salida -> (left right)
 
 ;======================================================
 
@@ -531,9 +534,9 @@
       [else ("Operación no válida")])))
 
 ; Pruebas
-(Operar-binarias '( (2 multiplica (4 suma 1) ) multiplica ( (2 multiplica 4) resta 1 ) ) )
-(Operar-binarias '(2 suma 12) )
-(Operar-binarias '( (2 resta (4 suma 1) ) multiplica ( (2 multiplica 4) multiplica 2 ) ) )
+(Operar-binarias '( (2 multiplica (4 suma 1) ) multiplica ( (2 multiplica 4) resta 1 ) ) )  ; salida -> 70
+(Operar-binarias '(2 suma 12) )  ; salida -> 14
+(Operar-binarias '( (2 resta (4 suma 1) ) multiplica ( (2 multiplica 4) multiplica 2 ) ) )  ; salida -> -48
 ;======================================================
 
 ; PUNTO: 17
@@ -572,10 +575,10 @@
                   (prod-scalar-matriz (cdr mat) vec))))))
 
 ;pruebas
-(prod-scalar-matriz '((1 1) (2 2)) '(2 3))
-(prod-scalar-matriz '((1 1) (2 2) (3 3)) '(2 3))
-(prod-scalar-matriz '((0 0) (0 0) (0 0)) '(2 3))
-(prod-scalar-matriz '((1 2 3) (4 5 6)) '(2 3 4 5))
+(prod-scalar-matriz '((1 1) (2 2)) '(2 3)) ; salida -> ((2 3) (4 6))
+(prod-scalar-matriz '((1 1) (2 2) (3 3)) '(2 3)) ; salida -> ((2 3) (4 6) (6 9))
+(prod-scalar-matriz '((0 0) (0 0) (0 0)) '(2 3)) ; salida -> ((0 0) (0 0) (0 0))
+(prod-scalar-matriz '((1 2 3) (4 5 6)) '(2 3 4 5)) ; salida -> ((2 6 12) (8 15 24))
 
 ;=====================================================
 
@@ -614,3 +617,7 @@
                   (new-row '())
                   (i 0))
              (build-row prev prev-padded next-prev new-row i))))))
+
+; Pruebas :
+(pascal 2) ; salida -> (1 1)
+(pascal 7) ; salida -> (1 6 15 20 15 6 1)

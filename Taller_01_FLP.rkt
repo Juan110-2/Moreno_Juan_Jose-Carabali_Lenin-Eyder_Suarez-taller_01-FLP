@@ -412,10 +412,13 @@
 
 ; PUNTO: 15
 
-;Elabore una función llamada (count-odd-and-even arbol) que
-;toma un  ́arbol binario y retorna una lista con dos elementos correspondientes
-;a la cantidad de pares e impares en arbol.
-
+; uso (count-odd-and-even arbol) -> propósito: contar la cantidad de pares e impares
+; dentro del arbol
+;
+; tree -> <list (num1 num2)>
+;
+; <expression> :== '()
+;              ::= ( <int> <binary-tree> <binary-tree> ) 
 
 (define count-odd-and-even
   (lambda (arbol)
@@ -425,7 +428,7 @@
              (let* ((left-counts (count-odd-and-even-helper (cadr nodo)))
                     (right-counts (count-odd-and-even-helper (caddr nodo)))
                     (current-counts
-                     (if (odd? (car nodo))
+                     (if (even? (car nodo))
                          (list (+ 1 (car left-counts) (car right-counts))
                                (+ (cadr left-counts) (cadr right-counts)))
                          (list (+ (car left-counts) (car right-counts))
@@ -433,6 +436,15 @@
                current-counts))))
     (count-odd-and-even-helper arbol)))
 
+; pruebas
+(count-odd-and-even '(14 (7 () (12 () ()))
+(26 (20 (17 () ())
+())
+(31 () ()))))
+
+(count-odd-and-even '(5 (4 () ()) (3 () (2 () ()))))
+
+(count-odd-and-even '(7 (2 (1 () ()) (4 () ())) (9 (8 () ()) (6 () ()))))
 
 
 ;======================================================

@@ -110,8 +110,6 @@
 ; (<List> <Integer> <List>) :: '()
 ;                           :: (<List(<scheme-value>)> )
 
-
-
 ; list-set: list number any -> list
 ; Retorna una lista igual a L, pero con el elemento x en la posición n
 (define (list-set L n x)
@@ -293,24 +291,17 @@
 ; PUNTO: 9
 
 ; inversions:
-
 ; uso (inversions L) -> El propósito de la función inversions es tomar una lista y determinar su número de
 ; inversiones, se contará como inversión si cumple el requisito que el valor ingresado dentro de la lista sea
 ; menor al número de la posición de la lista siguiente "i < j" en el extremo izquierdo, e "ai > aj" sea menor 
 ; que el número siguiente en el extremo derecho.
-
 ; inversions : L
-
 
 ; inversions <list L> -> <integer result>
 ; <list> :: 0
 ;        :: (<integer>)
-
 ; <count-inversions> <integer x> <list lst> :: 0
 ;                                           :: (<integer>)
-
-
-
 
 (define (inversions L)
   (define (count-inversions x lst)
@@ -399,8 +390,6 @@
 ;                          ::= <integer element>
 
 
-
-
 (define (filter-acum a b F acum filter)
   (define (accumulate-from-a-to-b current-accumulator current-element)
     (cond ((and (>= current-element a)
@@ -421,8 +410,6 @@
 ; Pruebas
  (filter-acum 1 10 + 0 odd?)
  (filter-acum 1 10 + 0 even?)
-
-
 
 ;======================================================
 

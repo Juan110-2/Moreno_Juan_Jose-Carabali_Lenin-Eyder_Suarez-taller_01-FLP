@@ -4,17 +4,18 @@
 ; Lenin Esteban Carabali Moreno 2310025-3743
 
 ; Propósito: concatenar dos listas en una sola
+; my-append : (list 'a) (list 'b) -> (list 'a+'b) 
 (define (my-append lista1 lista2)
-  (if (null? lista1)
-      lista2
-      (cons (car lista1) (my-append (cdr lista1) lista2))))
+  (cond
+    ((null? lista1) lista2)
+    (else (cons (car lista1) (my-append (cdr lista1) lista2)))))
 
 ; Propósito: retornar la longitud de una lista
+; my-length : (list 'a) -> integer
 (define (my-length L1)
-  (if
-   (null? L1)
-     0
-    (+ 1 (my-length (cdr L1)))))
+  (cond
+    ((null? L1) 0)
+    (else (+ 1 (my-length (cdr L1))))))
 
 ; PUNTO 1
 ; invert:
@@ -48,26 +49,24 @@
 ;======================================================
 
 ; PUNTO: 2
-; Propósito: retornar una lista con cada elemento de la lista encerrado en paréntesis
+; Uso (down L) -> El propósito es retornar una lista con cada elemento de la lista encerrado en paréntesis
 ; ejemplo: si se tiene (2 3 4) debería retornar ((2) (3) (4))
-
-; <OperacionB>::= <int>
-;            ::= (<OperacionB> 'suma <OperacionB>)
-;            ::= (<OperacionB> 'resta <OperacionB>)
-;            ::= (<OperacionB> 'multiplica <OperacionB>)
-
+;
+; L -> (list (L))
+;
+; <list> ::= '()
+;        ::= (<scheme-value> <list>)
 
 (define (down L)
-  (if (null? L)
-      '() ; Si la lista está vacía, retornamos una lista vacía.
-      (cons (list (car L)) (down (cdr L))))) ; Se crea una lista con el primer elemento, se repite con el resto
+  (cond
+    ((null? L) '())
+    (else (cons (list (car L)) (down (cdr L))))))
 
 ; pruebas
 (down '(1 2 3))
 (down '((una) (buena) (idea)))
 (down '(un (objeto (mas)) complicado))
-
-
+(down '(una (estructura (de (datos (anidada))))))
 
 ;======================================================
 
@@ -117,8 +116,13 @@
 ;======================================================
 
 ; PUNTO: 5
-; Propósito: Buscar y retornar la posición en la que sse encuentre el primer elemento que cumpla con la condición ejemplo: primero número (a 2)
-; retornaría posición 1.
+; Uso (list-index P L) -> El propósito es buscar y retornar la posición en la que se encuentre
+; el primer elemento que cumpla con la condición ejemplo: primero número (a 2) retornaría posición 1.
+;
+; list-index : P L -> Integer | Boolean
+;
+; <list>::= '()
+;       ::= (<scheme-value> (<scheme-value> <list>))
 
 (define (list-index P L)
   (define (list-index-helper index L)
@@ -133,6 +137,7 @@
 (list-index number? '(a 2 (1 3) b 7))
 (list-index symbol? '(a (b c) 17 foo))
 (list-index symbol? '(1 2 (a b) 3))
+(list-index list? '(1 2 (a b) (x y z) 3))
 
 ;======================================================
 
@@ -151,8 +156,6 @@
         [(equal? E2 (car l)) (cons E1 (swapper E1 E2 (cdr l)))] ; Si el primer elemento de la lista 'L' es igual a e2, reemplazarlo por e1 y seguir con el resto de la lista
         [else (cons (car l) (swapper E1 E2 (cdr l)))] ; Si el primer elemento no es ni e1 ni e2, mantenerlo y seguir con el resto de la lista
         ))
-
-
 
 ;======================================================
 
@@ -190,10 +193,19 @@
 ;======================================================
 
 ; PUNTO: 8
-; Propósito: Se busca que se retorne F(a) = b, sienda a la L1 y b la L2 por ejemplo:
+; Uso (mapping (lambda (d) (Function d number)) L1 L2) -> el proposito es buscar que se retorne
+; F(a) = b, sienda a la L1 y b la L2 por ejemplo:
 ; Se tiene que la operación es una multiplicación por 2 y los elementos de la lista
 ; son L1 (1 2 3) y L2 (2 3 4). Por lo tanto, los únicos elementos que cumplen con
 ; la indicación es (1 2) por 1 por la función (* 2) es igual al 2 de la L2.
+; mapping : ('a -> 'b) (list 'a) (list 'b) -> (list (list 'a 'b))
+
+; mapping : F L1 L2 -> L3
+;
+; <espression> ::= (lambda <function>) <list1> <list2>
+; <list1>      ::= {int}*
+; <list2>      ::= {int}*
+;
 
 (define mapping
   (lambda (F L1 L2)
@@ -210,11 +222,11 @@
 (mapping (lambda (d) (* d 2)) (list 1 2 3) (list 2 4 6))
 (mapping (lambda (d) (* d 3)) (list 1 2 2) (list 2 4 6))
 (mapping (lambda (d) (* d 2)) (list 1 2 3) (list 3 9 12))
+(mapping (lambda (d) (+ d 10)) (list 1 2 3 4) (list 5 6 7 8))
 
 ;========================================================
 
 ; PUNTO: 9
-
 ; Elabore una función llamada inversions que recibe como entrada
 ; una lista L, y determina el ńumero de inversiones de la lista L. De manera formal, sea A = (a1a2...an)
 ; una lista de n n ́umeros diferentes, si i < j (posici ́on)
@@ -259,20 +271,28 @@
 ;========================================================
 
 ; PUNTO: 11
-; Propósito: se busca operar los elementos de las lista con la función que se defina
+; Uso (zip function L1 L2) -> En el propósito se busca operar los elementos de las lista
+; con la función que se defina
 ; Por ejemplo: si la función es suma, sería  sumar el primer elemento de la Lista 1
 ; Con el primer elemento de la lista 2, y así sucesivamente con todos los elementos.
+;
+; <espression> ::= <function> <list1> <list2>
+; <list1>      ::= {int}*
+; <list2>      ::= {int}*
 
 (define (zip F L1 L2)
-  (if (= (my-length L1) (my-length L2))
-      (if (null? L1)
-          '()
-          (cons (F (car L1) (car L2)) (zip F (cdr L1) (cdr L2))))
-      '()))
+  (cond
+    ((= (my-length L1) (my-length L2))
+     (cond
+       ((null? L1) '())
+       (else (cons (F (car L1) (car L2))
+                   (zip F (cdr L1) (cdr L2))))))
+    (else '())))
 
 ; Pruebas
 (zip + '(1 4) '(6 2))
 (zip * '(11 5 6) '(10 9 8))
+(zip / '(10 25 18) '(5 5 6))
 
 ;======================================================
 
@@ -331,11 +351,17 @@
 ;======================================================
 
 ; PUNTO: 14
-; Propósito: Se busca obtener la ruta hasta encontrar el número dentro de un arbol binario
+; (Path n BST) -> El propósito es buscar obtener la ruta hasta encontrar el número dentro de un arbol binario
 ; definido, por ejemplo quiero buscar un el 7 en mi arbol, y este se encuentra dos nodos
 ; a la derecha, al ingresar el número que busco y el arbol donde debo buscarlo debería
 ; retornarme derecha derecha
-
+;
+; number tree -> L1
+;
+; <expression>  ::= <number> <binary-tree>
+; <binary-tree> ::= '() 
+;               ::= ( <int> <binary-tree> <binary-tree> ) 
+       
 
 (define (path n BST)
   (define (path-helper n BST current-path)
@@ -353,6 +379,10 @@
 ())
 (31 () ()))))
 
+(path 12 '(14 (7 () (12 () ()))
+(26 (20 (17 () ())
+())
+(31 () ()))))
 
 ;======================================================
 
@@ -388,7 +418,7 @@
 ; <OperacionB>::= <int>
 ;            ::= (<OperacionB> 'suma <OperacionB>)
 ;            ::= (<OperacionB> 'resta <OperacionB>)
-;            ::= (<OperacionB> 'multiplica <OperacionB>)
+;            ::= (<OperacionB> 'multiplica <OperacionB>)ty
 
 ; Implementa una función llamada (Operar-binarias operacionB) que recibe
 ; como parámetro una operación binaria válida y retorna el resultado de hacer
@@ -412,34 +442,45 @@
 ;======================================================
 
 ; PUNTO: 17
-; Propósito prod-scalar-matriz-aux: su propósito es una multiplicación escalar
+
+; Uso(prod-scalar-matriz-aux L1 L2) -> Propósito prod-scalar-matriz-aux: su propósito
+; es una multiplicación escalar
 ; entre una fila de una matriz y un vector (una lista de números).
 ; Se busca calcular el producto escalar entre la fila y el vector de manera recursiva.
+;
+; {int]* {int}* -> {int}*
+;
+; <espression> ::= {int}* {int}*
 
 (define prod-scalar-matriz-aux
   (lambda (fila vec)
-    (if (or (null? fila) (null? vec))
-        '()
-        (cons (* (car fila) (car vec))
-              (prod-scalar-matriz-aux (cdr fila) (cdr vec))))))
+    (cond
+      ((or (null? fila) (null? vec)) '())
+      (else (cons (* (car fila) (car vec))
+                  (prod-scalar-matriz-aux (cdr fila) (cdr vec)))))))
 
-; Propósito prod-scalar-matriz: calcular el producto escalar entre una matriz
+; Uso (prod-scalar-matriz L1 L2) -> Propósito prod-scalar-matriz: calcular el producto
+; escalar entre una matriz
 ; una lista de listas) y un vector (una lista de números).
 ; Esta función utiliza la función auxiliar prod-scalar-matriz-aux para realizar el cálculo
 ; en cada fila de la matriz y luego combina los resultados en una nueva matriz.
+;
+; {int]* {int}* -> {int}*
+;
+; <espression> ::= {int}* {int}*
 
 (define prod-scalar-matriz
   (lambda (mat vec)
-    (if (or (null? mat) (null? vec))
-        '() ; Si la matriz o el vector están vacíos, el resultado es una lista vacía.
-        (cons (prod-scalar-matriz-aux (car mat) vec)
-              (prod-scalar-matriz (cdr mat) vec)))))
+    (cond
+      ((or (null? mat) (null? vec)) '())
+      (else (cons (prod-scalar-matriz-aux (car mat) vec)
+                  (prod-scalar-matriz (cdr mat) vec))))))
 
 ;pruebas
 (prod-scalar-matriz '((1 1) (2 2)) '(2 3))
 (prod-scalar-matriz '((1 1) (2 2) (3 3)) '(2 3))
-
-
+(prod-scalar-matriz '((0 0) (0 0) (0 0)) '(2 3))
+(prod-scalar-matriz '((1 2 3) (4 5 6)) '(2 3 4 5))
 
 ;=====================================================
 

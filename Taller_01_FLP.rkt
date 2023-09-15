@@ -3,6 +3,8 @@
 ; Eyder Santiago Suárez Chávez 2322714-3743
 ; Lenin Esteban Carabali Moreno 2310025-3743
 
+;======================================================
+
 ; Uso (my-append L1 L2) -> Propósito: concatenar dos listas en una sola
 ;
 ; L1 L2 -> L3
@@ -19,6 +21,8 @@
 (my-append '((a 1) (a 2)) '((1 b) (2 b)))
 (my-append '("hola") '("Mundo"))
 
+;======================================================
+
 ; Uso (my-length L1) -> Propósito: retornar la longitud de una lista
 ;
 ; my-length : (list 'a) -> integer
@@ -34,6 +38,8 @@
 ; pruebas
 (my-length '((a 1) (a 2) (1 b) (2 b)))
 (my-length '("hola" "Mundo"))
+
+;======================================================
 
 ; PUNTO 1
 ; invert:

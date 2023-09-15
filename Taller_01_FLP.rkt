@@ -16,6 +16,11 @@
      0
     (+ 1 (my-length (cdr L1)))))
 
+; Funciones auxiliares usadas
+
+
+;======================================================
+
 ; PUNTO 1
 ; invert:
 ; uso ( invert L) -> El propósito de la función invert es tomar una lista
@@ -25,24 +30,23 @@
 ;
 ; invert : L -> L'
 ; 
-;  <list> ::= '() 
-;         ::= ((<scheme-value> <scheme-value>) <list>)
-
+;  <list> ::= <scheme-value> <scheme-value>
+;  <scheme-value> ::= {int | symbol}*
 
 (define invert
   (lambda (L)
-    (if (null? L) '()
+    (cond
+      [(null? L) '()]
+      [else
         (let*
-            (
-             (head (car L))
-             (x (car head))
-             (y (cadr head))
-             )
-          (cons (list y x) (invert (cdr L)) )))))
+          [(head (car L))
+           (x (car head))
+           (y (cadr head))]
+          (cons (list y x) (invert (cdr L))))])))
 
 ; pruebas
-(invert '((a 1) (a 2) (1 b) (2 b)))
-(invert '((5 9) (10 91) (82 7) (a e) ("hola" "Mundo")))
+(invert '((a 3) (b 8) (1 e) (f k))) 
+(invert '((3 9) (1 91) ("h" r) (x e) ("h" "w"))) 
 (invert '(("es" "racket") ("genial" "muy") (17 29) (81 o)))
 
 ;======================================================
@@ -50,11 +54,6 @@
 ; PUNTO: 2
 ; Propósito: retornar una lista con cada elemento de la lista encerrado en paréntesis
 ; ejemplo: si se tiene (2 3 4) debería retornar ((2) (3) (4))
-
-; <OperacionB>::= <int>
-;            ::= (<OperacionB> 'suma <OperacionB>)
-;            ::= (<OperacionB> 'resta <OperacionB>)
-;            ::= (<OperacionB> 'multiplica <OperacionB>)
 
 
 (define (down L)
@@ -78,7 +77,7 @@
 ; (indexando desde cero) el elemento x. Ejemplos:
 
 
-; list-set: list number any -> list
+; list-set: list number any -> list'
 ; Retorna una lista igual a L, pero con el elemento x en la posición n
 (define (list-set L n x)
   (cond
@@ -97,22 +96,23 @@
 ; que contiene elementos de la lista original L que 
 ; satisfacen un predicado P
 ;
-; filter-in : P x L -> L'
+; filter-in : P L -> L'
 ; 
 ;  <list> ::= '()
-;         ::= <scheme-value> <list>
-
+;         ::= (<scheme-value> <list>)
 
 (define filter-in
   (lambda (P L)
-    (if (null? L) '()
-        (if (not (P (car L))) (filter-in P (cdr L))
-           (cons (car L) (filter-in P (cdr L)))))))
+    (cond
+      [(null? L) '()]
+      [(not (P (car L))) (filter-in P (cdr L))]
+      [else (cons (car L) (filter-in P (cdr L)))])))
+
 
 ; Pruebas
-(filter-in number? '(a 2 (1 3) b 7))
-(filter-in symbol? '(a (b c) 17 foo))
-(filter-in string? '(a b u "univalle" "racket" "flp" 28 90 (1 2 3)))
+(filter-in number? '(a 2 (1 3) b 7 y ((a)))) 
+(filter-in symbol? '(a 2 (1 3) b 7 y ((a)))) 
+(filter-in string? '(a 2 (1 3) b 7 y ((a)))) 
 
 ;======================================================
 
@@ -157,11 +157,6 @@
 ;======================================================
 
 ; PUNTO: 7
-; Elabore una función llamada cartesian-product que recibe como
-; argumentos 2 listas de símbolos sin repeticiones L1 y L2. La función debe
-; retornar una lista de tuplas que representen el producto cartesiano entre L1
-; y L2. Los pares pueden aparecer en cualquier orden.
-
 ; cartesian-product
 ; uso ( cartesian-product L1 L1) -> El propósito de 
 ; la función cartesian-product es calcular y 
@@ -171,21 +166,40 @@
 ;
 ; cartesian-product : L1 x L2 -> L3 tal que { (x, y) | x ∈ L1, y ∈ L2 }
 ; 
-;  <list> ::= '() 
-;         ::= ((<int | symbol> <int | symbol>) <list>)
+;  <list> ::= '() | <scheme-value>
+;         ::= (<list> <list>)
+;
+; <scheme-value> ::= {int | symbol}*
 
 (define cartesian-product
   (lambda (L1 L2)
     (if (null? L1) '()
         (my-append (cartesian-product-aux2 (car L1) L2) (cartesian-product (cdr L1) L2)))))
 
+; Pruebas
+(cartesian-product '(a b c) '(x y)) 
+(cartesian-product '(p q r) '(5 6 7)) 
+(cartesian-product '(a "as" c) '(2 0))
+
+; El proposito de es tomar el valor de la posción 0 en la lista 1 y crear una lista con todos los valores de la lista 2
+
+; cartesian-product-aux : L1 x L2 -> L3 tal que { (L1, y) | L1, y ∈ L2 }
+; 
+;  <list> ::= '() | <scheme-value>
+;         ::= {(<L1> <list>)}*
+
+; <L1> ::= car de lista L1 (symbol)
+; <scheme-value> ::= {int | symbol}*
+
 (define cartesian-product-aux2
   (lambda (L1 L2)
     (if (null? L2) '()
         (cons (list L1 (car L2)) (cartesian-product-aux2 L1 (cdr L2))))))
-;Pruebas
-(cartesian-product '(a b c) '(x y))
-(cartesian-product '(p q r) '(5 6 7))
+
+; Pruebas
+(cartesian-product-aux2 'a '(x y)) 
+(cartesian-product-aux2 'r '(5 6 7)) 
+(cartesian-product-aux2 'j '(2 0))
 
 ;======================================================
 
@@ -253,8 +267,10 @@
       [else (cons (car L) (up (cdr L)))])))
 
 ; Pruebas
-(up '((1 2) (3 4)))
-(up '((x (y)) z))
+
+(up '((1 a) (z y 4))) 
+(up '((x (y)) z ("hola")))
+(up '(a (2 4) 9 ((s))))
 
 ;========================================================
 
@@ -304,14 +320,17 @@
 ;======================================================
 
 ; PUNTO: 13 
-; Elabore una función llamada (operate lrators lrands) donde
-; lrators es una lista de funciones binarias de tamaño n y lrands es una lista
-; de números de tama~no n + 1. La función retorna el resultado de aplicar
-; sucesivamente las operaciones en lrators a los valores en lrands.
 
-(define operate
-  (lambda (lrators lrands)
-    (operate-aux (rev lrators) (rev lrands))))
+; funciones auxiliares
+; operate-aux lrators-rev lrands-rev el proposito es organizar las operaciones
+; y los números para poderlos operar.
+
+; operate-aux : lrators-rev lrands-rev -> number
+
+; <lrators-rev>  ::= ({<operators>}*) 
+; <operators> ::= + | - | * | /
+;
+; <lrands> ::= ({<int>}*)
 
 (define operate-aux
   (lambda (lrators-rev lrands-rev)
@@ -324,9 +343,47 @@
              )
           (operator (operate-aux (cdr lrators-rev) (cdr lrands-rev)) number)))))
 
+; El proposito de esta fucnión auxiliar es revertir la lista para poder organizar
+; el orden en que se ejecutan las operciones por la jerarquia en matematicas.
+;
+; rev : lst -> lst'
+;
+; <rev>  ::= ({<scheme-value>}*) 
+
 (define (rev lst)
  (if (null? lst)
      '() (my-append (rev (cdr lst)) (list (car lst)))))
+
+(rev '(1 2 3 4))
+(rev '(3 4 7 1))
+
+
+; operate 
+; uso (operate lrators lrands) ->
+; El propósito de la función (operate lrators lrands) es realizar 
+; una serie de operaciones utilizando los operadores en la lista  
+; lrators y los números en la lista lrands, retornando el resultado 
+; final de estas operaciones.
+;
+; operate : lrators lrands -> int 
+; recibe dos listas, hace las operaciones y retorna un entero
+; 
+; <lrators>  ::= ({<operators>}*) 
+; <operators> ::= + | - | * | /
+;
+; <lrands> ::= ({<int>}*)
+
+(define operate
+  (lambda (lrators lrands)
+    (operate-aux (rev lrators) (rev lrands))))
+
+
+;Pruebas
+
+(operate (list + * + - *) '(1 2 8 4 11 6)) 
+(operate (list * * -) '(4 5 7 8)) 
+(operate (list / * -) '(4 4 7 8))
+
 
 ;======================================================
 
@@ -384,31 +441,38 @@
 ;======================================================
 
 ; Punto: 16
-; Dada la siguiente gramática sobre operaciones binarias:
+; Operar-binarias
+; El propósito de la función (Operar-binarias operacionB) es aplicar 
+; una operación binaria válida (como suma, resta o multiplicación) a dos 
+; valores específicos y retornar el resultado (entero) de esas operaciones.
+; 
+; Operar-binarias : operacion -> int
+;
 ; <OperacionB>::= <int>
 ;            ::= (<OperacionB> 'suma <OperacionB>)
 ;            ::= (<OperacionB> 'resta <OperacionB>)
 ;            ::= (<OperacionB> 'multiplica <OperacionB>)
 
-; Implementa una función llamada (Operar-binarias operacionB) que recibe
-; como parámetro una operación binaria válida y retorna el resultado de hacer
-; las operaciones suma, resta y multiplicaciónn correspondientes.
 
+(define Operar-binarias
+  (lambda (operacion)
+    (cond
+      [(number? operacion) operacion] ; Si es un número, simplemente lo retornamos
+      [(list? operacion)
+       (let ((izquierda (car operacion))
+             (operador (cadr operacion))
+             (derecha (caddr operacion)))
+         (cond
+           [(equal? operador 'suma) (+ (Operar-binarias izquierda) (Operar-binarias derecha))]
+           [(equal? operador 'resta) (- (Operar-binarias izquierda) (Operar-binarias derecha))]
+           [(equal? operador 'multiplica) (* (Operar-binarias izquierda) (Operar-binarias derecha))]
+           [else ("Operador desconocido")]))]
+      [else ("Operación no válida")])))
 
-(define (Operar-binarias operacion)
-  (cond
-    [(number? operacion) operacion] ; Si es un número, simplemente lo retornamos
-    [(list? operacion)
-     (let ((izquierda (car operacion))
-           (operador (cadr operacion))
-           (derecha (caddr operacion)))
-       (cond
-         [(eq? operador 'suma) (+ (Operar-binarias izquierda) (Operar-binarias derecha))]
-         [(eq? operador 'resta) (- (Operar-binarias izquierda) (Operar-binarias derecha))]
-         [(eq? operador 'multiplica) (* (Operar-binarias izquierda) (Operar-binarias derecha))]
-         [else ("Operador desconocido")]))]
-    [else ("Operación no válida")]))
-
+; Pruebas
+(Operar-binarias '( (2 multiplica (4 suma 1) ) multiplica ( (2 multiplica 4) resta 1 ) ) )
+(Operar-binarias '(2 suma 12) )
+(Operar-binarias '( (2 resta (4 suma 1) ) multiplica ( (2 multiplica 4) multiplica 2 ) ) )
 ;======================================================
 
 ; PUNTO: 17

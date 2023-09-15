@@ -79,15 +79,11 @@
 ; PUNTO: 2
 ; Uso (down L) -> El propósito es retornar una lista con cada elemento de la lista encerrado en paréntesis
 ; ejemplo: si se tiene (2 3 4) debería retornar ((2) (3) (4))
-<<<<<<< HEAD
-
-=======
 ;
 ; L -> (list (L))
 ;
 ; <list> ::= '()
 ;        ::= (<scheme-value> <list>)
->>>>>>> 51af152b4c990592765bb67761d1bc2c525d80a6
 
 (define (down L)
   (cond

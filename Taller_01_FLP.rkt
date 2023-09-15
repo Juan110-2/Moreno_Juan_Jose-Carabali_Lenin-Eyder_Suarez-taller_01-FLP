@@ -1,7 +1,7 @@
 #lang eopl
-; Juan José Moreno Jaramillo 2310038-3743
-; Eyder Santiago Suárez Chávez 2322714-3743
-; Lenin Esteban Carabali Moreno 2310025-3743
+; Juan José Moreno Jaramillo - 2310038-3743
+; Eyder Santiago Suárez Chávez - 2322714-3743
+; Lenin Esteban Carabali Moreno - 2310025-3743
 
 ;======================================================
 
@@ -189,6 +189,27 @@
 ;======================================================
 
 ; PUNTO: 7
+
+; El proposito de es tomar el valor de la posción 0 en la lista 1 y crear una lista con todos los valores de la lista 2
+
+; cartesian-product-aux : L1 x L2 -> L3 tal que { (L1, y) | L1, y ∈ L2 }
+; 
+;  <list> ::= '() | <scheme-value>
+;         ::= {(<L1> <list>)}*
+
+; <L1> ::= car de lista L1 (symbol)
+; <scheme-value> ::= {int | symbol}*
+
+(define cartesian-product-aux2
+  (lambda (L1 L2)
+    (if (null? L2) '()
+        (cons (list L1 (car L2)) (cartesian-product-aux2 L1 (cdr L2))))))
+
+; Pruebas
+(cartesian-product-aux2 'a '(x y)) 
+(cartesian-product-aux2 'r '(5 6 7)) 
+(cartesian-product-aux2 'j '(2 0))
+
 ; cartesian-product
 ; uso ( cartesian-product L1 L1) -> El propósito de 
 ; la función cartesian-product es calcular y 
@@ -213,25 +234,6 @@
 (cartesian-product '(p q r) '(5 6 7)) 
 (cartesian-product '(a "as" c) '(2 0))
 
-; El proposito de es tomar el valor de la posción 0 en la lista 1 y crear una lista con todos los valores de la lista 2
-
-; cartesian-product-aux : L1 x L2 -> L3 tal que { (L1, y) | L1, y ∈ L2 }
-; 
-;  <list> ::= '() | <scheme-value>
-;         ::= {(<L1> <list>)}*
-
-; <L1> ::= car de lista L1 (symbol)
-; <scheme-value> ::= {int | symbol}*
-
-(define cartesian-product-aux2
-  (lambda (L1 L2)
-    (if (null? L2) '()
-        (cons (list L1 (car L2)) (cartesian-product-aux2 L1 (cdr L2))))))
-
-; Pruebas
-(cartesian-product-aux2 'a '(x y)) 
-(cartesian-product-aux2 'r '(5 6 7)) 
-(cartesian-product-aux2 'j '(2 0))
 
 ;======================================================
 
@@ -271,7 +273,7 @@
 
 ; PUNTO: 9
 ; Elabore una función llamada inversions que recibe como entrada
-; una lista L, y determina el ńumero de inversiones de la lista L. De manera formal, sea A = (a1a2...an)
+; una lista L, y determina el ńumero de inversiones de la lista L. De manera formal, sea A = (a1a2...an)
 ; una lista de n n ́umeros diferentes, si i < j (posici ́on)
 ; y ai > aj (dato en la posición) entonces la pareja (i j) es una inversión de A.
 
@@ -578,9 +580,14 @@
 ;=====================================================
 
 ; PUNTO 18
-; Elabore una función llamada (pascal N) que retorna la fila N
-; del triangulo de Pascal. A continuacíon se muestra las primeras cinco filas
-; del triangulo de Pascal:
+; pascal
+; El propósito de la función `(pascal N)` es generar y retornar la fila número
+; `N` del Triángulo de Pascal, donde cada elemento de la fila es calculado como
+; la suma de los dos números directamente encima de él en la fila anterior.
+;
+; pascal : n -> list
+;
+; <pascal>::= <int>
 
 (define pascal
   (lambda (n)
